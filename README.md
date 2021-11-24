@@ -1,0 +1,2 @@
+# Automacao Residencial
+ O trabalho proposto possui como objetivo a interdisciplinaridade das matérias de Banco de Dados, Arquitetura de Computadores II e Internet das Coisas (IoT). Assim, foi proposto pelo grupo a elaboração de uma automação residencial contando com um alarme externo a casa, abertura e fechamento de porta automático e o acendimento de lâmpadas. Buscando, dessa forma, a integração com os tópicos abordados na disciplina e uma forma eficiente e acessível de demonstrar o IoT. 
