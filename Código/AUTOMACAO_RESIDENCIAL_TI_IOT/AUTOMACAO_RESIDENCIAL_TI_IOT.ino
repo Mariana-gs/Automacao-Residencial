@@ -10,13 +10,18 @@
 #define PIN_LED_VARANDA 15  //LV DV
 #define PIN_TMP 33
 #define PIN_LDR 32
+#define PIN_FOTOTRAN 35
+
+
 float temperatura = 0.0;
 int luz = 0;
+int referencia = 600; // Valor de referência
 
 /* Definicoes para o MQTT */
 #define TOPICO_SUBSCRIBE_LED         "PUCSG_IOT_TP4_LED"
 #define TOPICO_PUBLISH_TEMPERATURA   "PUCSG_IOT_TP4_TEMP"
 #define TOPICO_PUBLISH_LUMINOSIDADE  "PUCSG_IOT_TP4_LUZ"
+#define TOPICO_PUBLISH_ALARME        "PUCSG_IOT_TP4_ALARME"
 
 #define ID_MQTT  "PUCSG_IOT_TRABALHO4_CLOUD"     //id mqtt (para identificação de sessão)
 
@@ -90,9 +95,16 @@ void mqtt_callback(char* topic, byte* payload, unsigned int length)
   Serial.print("Chegou a seguinte string via MQTT: ");
   Serial.println(msg);
 
-
-#define PIN_LED_VARANDA 15  //LV DV
-
+  if (msg.equals("LA"))
+  {
+    //Ativar Alarme
+    Serial.println("Alarme Ativado mediante comando MQTT");
+  }
+  if (msg.equals("DA"))
+  {
+    //Desativar Alarme
+    Serial.println("Alarme Desativado mediante comando MQTT");
+  }
 
   /* toma ação dependendo da string recebida */
   if (msg.equals("LQ1"))
@@ -234,6 +246,7 @@ void setup() {
   pinMode(PIN_LED_SALA, OUTPUT);
   pinMode(PIN_LED_COZINHA, OUTPUT);
   pinMode(PIN_LED_VARANDA, OUTPUT);
+  pinMode(PIN_FOTOTRAN, INPUT);
 
   digitalWrite(PIN_LED_QUARTO1, LOW);    //Apaga o LED
   digitalWrite(PIN_LED_QUARTO2, LOW);    //Apaga o LED
@@ -255,6 +268,10 @@ void loop() {
   char temperatura_str[10] = {0};
   // cria string para luminosidade
   char luminosidade_str[10] = {0};
+  //cria string para alarme
+  char alarme_str[10] = {0};
+  char situacaoAlarme[15] = {0};
+  float alarme;
   
  /*garante funcionamento das conexões WiFi e ao broker MQTT */
    VerificaConexoesWiFIEMQTT();
@@ -263,25 +280,43 @@ void loop() {
    temperatura = analogRead(PIN_TMP);
    temperatura = (temperatura/1023);
    temperatura = ((temperatura-0.5)*100); 
-
-   //Obtem luminosidade do sensor
+   
+   //Obtem leitura do LDR
    luz = analogRead(PIN_LDR);
-  
+   alarme = analogRead(PIN_FOTOTRAN);
+   
+   //Obtem leitura do Fototransistor
+   if(alarme < referencia){
+    sprintf( situacaoAlarme, "%s",  "Sem Alteracao");
+    
+   }else{
+     sprintf(alarme_str, "%s", "LA");
+     sprintf( situacaoAlarme, "%s",  "Alarme Ativado");
+   }
+   
   // formata a temperatura como string
   sprintf(temperatura_str, "%.2fC", temperatura);
   // formata a luminosidade como string
   sprintf(luminosidade_str, "%d", luz);
+  
   
   /*  Publica a temperatura */
   MQTT.publish(TOPICO_PUBLISH_TEMPERATURA, temperatura_str);
   
   /*  Publica a luminosidade */
   MQTT.publish(TOPICO_PUBLISH_LUMINOSIDADE, luminosidade_str);
-
+  
+  /*  Publica o fototransitor */
+  MQTT.publish(TOPICO_PUBLISH_ALARME, alarme_str);
+  
   Serial.print("Temperatura: ");
   Serial.println(temperatura_str);
   Serial.print("Luminosidade: ");
   Serial.println(luminosidade_str);
+  Serial.print("Situacao Alarme: ");
+  Serial.println(situacaoAlarme);
+  Serial.print("Leitura Fototransistor: ");
+  Serial.println(alarme);
   
   /* keep-alive da comunicação com broker MQTT */
   MQTT.loop();
