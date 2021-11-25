@@ -132,7 +132,7 @@ void mqtt_callback(char* topic, byte* payload, unsigned int length)
     }
 
     Serial.println("Alarme Ativado mediante comando MQTT");
-    for(int i = 0; i < 6; i++){
+    for(int i = 0; i < 7; i++){
       digitalWrite(PIN_BUZZER, HIGH);
       digitalWrite(PIN_LED_QUARTO1, HIGH);    
       digitalWrite(PIN_LED_QUARTO2, HIGH);    
@@ -140,7 +140,7 @@ void mqtt_callback(char* topic, byte* payload, unsigned int length)
       digitalWrite(PIN_LED_COZINHA, HIGH);    
       digitalWrite(PIN_LED_VARANDA, HIGH);
       
-      delay(1200);
+      delay(500);
       digitalWrite(PIN_BUZZER, LOW);
       digitalWrite(PIN_LED_QUARTO1, LOW);    
       digitalWrite(PIN_LED_QUARTO2, LOW);    
@@ -148,7 +148,7 @@ void mqtt_callback(char* topic, byte* payload, unsigned int length)
       digitalWrite(PIN_LED_COZINHA, LOW);    
       digitalWrite(PIN_LED_VARANDA, LOW);
       
-      delay(800);
+      delay(200);
     }
     
     MQTT.publish(TOPICO_PUBLISH_ALARME, "DesativarAlarme");
@@ -385,7 +385,7 @@ void loop() {
   Serial.println(temperatura_str);
   Serial.print("Luminosidade: ");
   Serial.println(luminosidade_str);
-  Serial.print("Situacao Alarme: ");
+  //Serial.print("Situacao Alarme: ");
   //Serial.println(situacaoAlarme);
   /*Serial.print("Leitura Fototransistor: ");
   Serial.println(alarme);*/
