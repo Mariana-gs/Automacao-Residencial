@@ -1,6 +1,7 @@
 #include <arduino.h>
 #include <WiFi.h>
 #include <PubSubClient.h>
+#include <ESP32Servo.h>
 
 #define LED_BUILTIN 2
 #define PIN_LED_QUARTO1 2   //LQ1 DQ1
@@ -11,17 +12,20 @@
 #define PIN_TMP 33
 #define PIN_LDR 32
 #define PIN_FOTOTRAN 35
-
+#define PIN_SERVO 25
 
 float temperatura = 0.0;
 int luz = 0;
-int referencia = 600; // Valor de referência
+int referencia = 600; // Valor de referência fototransistor
+Servo s;
+int pos;
 
 /* Definicoes para o MQTT */
 #define TOPICO_SUBSCRIBE_LED         "PUCSG_IOT_TP4_LED"
 #define TOPICO_PUBLISH_TEMPERATURA   "PUCSG_IOT_TP4_TEMP"
 #define TOPICO_PUBLISH_LUMINOSIDADE  "PUCSG_IOT_TP4_LUZ"
 #define TOPICO_PUBLISH_ALARME        "PUCSG_IOT_TP4_ALARME"
+#define TOPICO_SUBSCRIBE_PORTA       "PUCSG_IOT_TP4_PORTA"
 
 #define ID_MQTT  "PUCSG_IOT_TRABALHO4_CLOUD"     //id mqtt (para identificação de sessão)
 
@@ -94,6 +98,27 @@ void mqtt_callback(char* topic, byte* payload, unsigned int length)
 
   Serial.print("Chegou a seguinte string via MQTT: ");
   Serial.println(msg);
+
+  if(msg.equals("FecharPorta"))
+  {
+    Serial.println("Fechando a porta");
+      
+    for(int pos = 0; pos < 105; pos++)
+    {
+      s.write(pos);
+      delay(15);
+    }
+  }
+  else if ("AbrirPorta")
+  {
+    Serial.println("Abrindo a porta");
+      
+    for(pos = 100; pos >= 0; pos--)
+    {
+      s.write(pos);
+      delay(15);
+    }
+  }
 
   if (msg.equals("LA"))
   {
@@ -184,6 +209,7 @@ void reconnectMQTT(void)
     {
       Serial.println("Conectado com sucesso ao broker MQTT!");
       MQTT.subscribe(TOPICO_SUBSCRIBE_LED);
+      MQTT.subscribe(TOPICO_SUBSCRIBE_PORTA);
     }
     else
     {
@@ -253,6 +279,14 @@ void setup() {
   digitalWrite(PIN_LED_SALA, LOW);       //Apaga o LED
   digitalWrite(PIN_LED_COZINHA, LOW);    //Apaga o LED
   digitalWrite(PIN_LED_VARANDA, LOW);    //Apaga o LED
+
+  ESP32PWM::allocateTimer(0);
+  ESP32PWM::allocateTimer(1);
+  ESP32PWM::allocateTimer(2);
+  ESP32PWM::allocateTimer(3);
+  s.setPeriodHertz(50); 
+  s.attach(PIN_SERVO, 500, 2400);
+  s.write(105);
 
   /* Inicializa a conexao wi-fi */
   initWiFi();
