@@ -12,6 +12,7 @@
 #define PIN_TMP 33
 #define PIN_LDR 32
 #define PIN_FOTOTRAN 35
+#define PIN_BUZZER 5
 #define PIN_SERVO 25
 
 float temperatura = 0.0;
@@ -109,7 +110,8 @@ void mqtt_callback(char* topic, byte* payload, unsigned int length)
       delay(15);
     }
   }
-  else if ("AbrirPorta")
+  
+  if (msg.equals("AbrirPorta"))
   {
     Serial.println("Abrindo a porta");
       
@@ -120,14 +122,48 @@ void mqtt_callback(char* topic, byte* payload, unsigned int length)
     }
   }
 
-  if (msg.equals("LA"))
+  if (msg.equals("AtivarAlarme"))
   {
-    //Ativar Alarme
+    
+    for(int pos = 0; pos < 105; pos++)
+    {
+      s.write(pos);
+      delay(15);
+    }
+
     Serial.println("Alarme Ativado mediante comando MQTT");
+    for(int i = 0; i < 6; i++){
+      digitalWrite(PIN_BUZZER, HIGH);
+      digitalWrite(PIN_LED_QUARTO1, HIGH);    
+      digitalWrite(PIN_LED_QUARTO2, HIGH);    
+      digitalWrite(PIN_LED_SALA, HIGH);       
+      digitalWrite(PIN_LED_COZINHA, HIGH);    
+      digitalWrite(PIN_LED_VARANDA, HIGH);
+      
+      delay(1200);
+      digitalWrite(PIN_BUZZER, LOW);
+      digitalWrite(PIN_LED_QUARTO1, LOW);    
+      digitalWrite(PIN_LED_QUARTO2, LOW);    
+      digitalWrite(PIN_LED_SALA, LOW);       
+      digitalWrite(PIN_LED_COZINHA, LOW);    
+      digitalWrite(PIN_LED_VARANDA, LOW);
+      
+      delay(800);
+    }
+    
+    MQTT.publish(TOPICO_PUBLISH_ALARME, "DesativarAlarme");
   }
-  if (msg.equals("DA"))
+  
+  if (msg.equals("DesativarAlarme"))
   {
-    //Desativar Alarme
+    digitalWrite(PIN_BUZZER, LOW);
+    digitalWrite(PIN_BUZZER, LOW);
+    digitalWrite(PIN_LED_QUARTO1, LOW);    
+    digitalWrite(PIN_LED_QUARTO2, LOW);    
+    digitalWrite(PIN_LED_SALA, LOW);       
+    digitalWrite(PIN_LED_COZINHA, LOW);    
+    digitalWrite(PIN_LED_VARANDA, LOW);
+      
     Serial.println("Alarme Desativado mediante comando MQTT");
   }
 
@@ -210,6 +246,7 @@ void reconnectMQTT(void)
       Serial.println("Conectado com sucesso ao broker MQTT!");
       MQTT.subscribe(TOPICO_SUBSCRIBE_LED);
       MQTT.subscribe(TOPICO_SUBSCRIBE_PORTA);
+      MQTT.subscribe(TOPICO_PUBLISH_ALARME);
     }
     else
     {
@@ -273,6 +310,7 @@ void setup() {
   pinMode(PIN_LED_COZINHA, OUTPUT);
   pinMode(PIN_LED_VARANDA, OUTPUT);
   pinMode(PIN_FOTOTRAN, INPUT);
+  pinMode(PIN_BUZZER, OUTPUT);
 
   digitalWrite(PIN_LED_QUARTO1, LOW);    //Apaga o LED
   digitalWrite(PIN_LED_QUARTO2, LOW);    //Apaga o LED
@@ -320,13 +358,13 @@ void loop() {
    alarme = analogRead(PIN_FOTOTRAN);
    
    //Obtem leitura do Fototransistor
-   if(alarme < referencia){
+   /*if(alarme < referencia){
     sprintf( situacaoAlarme, "%s",  "Sem Alteracao");
     
    }else{
      sprintf(alarme_str, "%s", "LA");
      sprintf( situacaoAlarme, "%s",  "Alarme Ativado");
-   }
+   }*/
    
   // formata a temperatura como string
   sprintf(temperatura_str, "%.2fC", temperatura);
@@ -341,16 +379,16 @@ void loop() {
   MQTT.publish(TOPICO_PUBLISH_LUMINOSIDADE, luminosidade_str);
   
   /*  Publica o fototransitor */
-  MQTT.publish(TOPICO_PUBLISH_ALARME, alarme_str);
+ // MQTT.publish(TOPICO_PUBLISH_ALARME, alarme_str);
   
   Serial.print("Temperatura: ");
   Serial.println(temperatura_str);
   Serial.print("Luminosidade: ");
   Serial.println(luminosidade_str);
   Serial.print("Situacao Alarme: ");
-  Serial.println(situacaoAlarme);
-  Serial.print("Leitura Fototransistor: ");
-  Serial.println(alarme);
+  //Serial.println(situacaoAlarme);
+  /*Serial.print("Leitura Fototransistor: ");
+  Serial.println(alarme);*/
   
   /* keep-alive da comunicação com broker MQTT */
   MQTT.loop();
