@@ -22,13 +22,13 @@ Servo s;
 int pos;
 
 /* Definicoes para o MQTT */
-#define TOPICO_SUBSCRIBE_LED         "PUCSG_IOT_TP4_LED"
-#define TOPICO_PUBLISH_TEMPERATURA   "PUCSG_IOT_TP4_TEMP"
-#define TOPICO_PUBLISH_LUMINOSIDADE  "PUCSG_IOT_TP4_LUZ"
-#define TOPICO_PUBLISH_ALARME        "PUCSG_IOT_TP4_ALARME"
-#define TOPICO_SUBSCRIBE_PORTA       "PUCSG_IOT_TP4_PORTA"
+#define TOPICO_SUBSCRIBE_LED         "PUCSG_IOT_TI_LED"
+#define TOPICO_PUBLISH_TEMPERATURA   "PUCSG_IOT_TI_TEMP"
+#define TOPICO_PUBLISH_LUMINOSIDADE  "PUCSG_IOT_TI_LUZ"
+#define TOPICO_PUBLISH_ALARME        "PUCSG_IOT_TI_ALARME"
+#define TOPICO_SUBSCRIBE_PORTA       "PUCSG_IOT_TI_PORTA"
 
-#define ID_MQTT  "PUCSG_IOT_TRABALHO4_CLOUD"     //id mqtt (para identificação de sessão)
+#define ID_MQTT  "PUCSG_IOT_TI_2021"     //id mqtt (para identificação de sessão)
 
 //WIFI
 const char* SSID     = "Soares"; // SSID / nome da rede WI-FI que deseja se conectar
