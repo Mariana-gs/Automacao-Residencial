@@ -17,7 +17,7 @@
 
 float temperatura = 0.0;
 int luz = 0;
-int referencia = 600; // Valor de referência fototransistor
+int referencia = 4090; // Valor de referência fototransistor
 Servo s;
 int pos;
 
@@ -124,12 +124,6 @@ void mqtt_callback(char* topic, byte* payload, unsigned int length)
 
   if (msg.equals("AtivarAlarme"))
   {
-    
-    for(int pos = 0; pos < 105; pos++)
-    {
-      s.write(pos);
-      delay(15);
-    }
 
     Serial.println("Alarme Ativado mediante comando MQTT");
     for(int i = 0; i < 7; i++){
@@ -358,19 +352,18 @@ void loop() {
    alarme = analogRead(PIN_FOTOTRAN);
    
    //Obtem leitura do Fototransistor
-   /*if(alarme < referencia){
+   if(alarme < referencia){
     sprintf( situacaoAlarme, "%s",  "Sem Alteracao");
     
    }else{
-     sprintf(alarme_str, "%s", "LA");
-     sprintf( situacaoAlarme, "%s",  "Alarme Ativado");
-   }*/
+     sprintf(alarme_str, "%s", "AtivarAlarme");
+     //sprintf(situacaoAlarme, "%s",  "Alarme Ativado");
+   }
    
   // formata a temperatura como string
   sprintf(temperatura_str, "%.2fC", temperatura);
   // formata a luminosidade como string
   sprintf(luminosidade_str, "%d", luz);
-  
   
   /*  Publica a temperatura */
   MQTT.publish(TOPICO_PUBLISH_TEMPERATURA, temperatura_str);
@@ -379,16 +372,16 @@ void loop() {
   MQTT.publish(TOPICO_PUBLISH_LUMINOSIDADE, luminosidade_str);
   
   /*  Publica o fototransitor */
- // MQTT.publish(TOPICO_PUBLISH_ALARME, alarme_str);
+  MQTT.publish(TOPICO_PUBLISH_ALARME, alarme_str);
   
   Serial.print("Temperatura: ");
   Serial.println(temperatura_str);
   Serial.print("Luminosidade: ");
   Serial.println(luminosidade_str);
-  //Serial.print("Situacao Alarme: ");
-  //Serial.println(situacaoAlarme);
-  /*Serial.print("Leitura Fototransistor: ");
-  Serial.println(alarme);*/
+  Serial.print("Situacao Alarme: ");
+  Serial.println(situacaoAlarme);
+  Serial.print("Leitura Fototransistor: ");
+  Serial.println(alarme);
   
   /* keep-alive da comunicação com broker MQTT */
   MQTT.loop();
