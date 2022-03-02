@@ -1,4 +1,4 @@
-# Automacao Residencial
+# Automação Residencial com ESP32 e MQTT
 O trabalho proposto possui como objetivo a interdisciplinaridade das matérias de Banco de Dados, Arquitetura de Computadores II e Internet das Coisas (IoT). Assim, foi proposto pelo grupo a elaboração de uma automação residencial contando com um alarme externo a casa, com controle de porta e lâmpadas feito remotamente e com informações de sensores de temperatura e luminosidade. Buscando, dessa forma, a integração com os tópicos abordados na disciplina e uma forma eficiente e acessível de demonstrar o IoT. 
 
 A linguagem utilizada para a realização do programa foi em C++, pelo
@@ -27,6 +27,11 @@ foi implementado no trabalho interdisciplinar será mostrada abaixo. Construída
 papelão e contando com os materiais eletrônicos, ela mostra as funcionalidades de
 uma casa inteligente.
 
-![Maquete_04](https://user-images.githubusercontent.com/81964220/156466244-d29ce62b-9f0c-457b-8681-a4d9906dbae7.jpeg)
+<div align="center">
+<img src="https://user-images.githubusercontent.com/81964220/156466244-d29ce62b-9f0c-457b-8681-a4d9906dbae7.jpeg" width="700px" />
+</div>
 
-![Maquete_01](https://user-images.githubusercontent.com/81964220/156466430-a27d9688-c7cf-4719-8473-984c06005bfb.jpeg)
+<div align="center">
+<img src="https://user-images.githubusercontent.com/81964220/156466430-a27d9688-c7cf-4719-8473-984c06005bfb.jpeg" width="700px" />
+</div>
+
