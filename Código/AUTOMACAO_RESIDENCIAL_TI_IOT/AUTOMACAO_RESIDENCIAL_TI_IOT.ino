@@ -356,8 +356,8 @@ void loop() {
     sprintf( situacaoAlarme, "%s",  "Sem Alteracao");
     
    }else{
+     sprintf(situacaoAlarme, "%s",  "Alarme Ativado");
      sprintf(alarme_str, "%s", "AtivarAlarme");
-     //sprintf(situacaoAlarme, "%s",  "Alarme Ativado");
    }
    
   // formata a temperatura como string
