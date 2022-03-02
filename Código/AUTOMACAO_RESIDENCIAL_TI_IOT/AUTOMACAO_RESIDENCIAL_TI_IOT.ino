@@ -31,8 +31,8 @@ int pos;
 #define ID_MQTT  "PUCSG_IOT_TI_2021"     //id mqtt (para identificação de sessão)
 
 //WIFI
-const char* SSID     = "Soares"; // SSID / nome da rede WI-FI que deseja se conectar
-const char* PASSWORD = "31060810#*"; // Senha da rede WI-FI que deseja se conectar
+const char* SSID     = ""; // SSID / nome da rede WI-FI que deseja se conectar
+const char* PASSWORD = ""; // Senha da rede WI-FI que deseja se conectar
 
 const char* BROKER_MQTT = "test.mosquitto.org";
 int BROKER_PORT = 1883; // Porta do Broker MQTT
