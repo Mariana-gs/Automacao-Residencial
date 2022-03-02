@@ -8,16 +8,16 @@ utilizada para realização dos testes junto com a placa ESP32.
 
 ## PROJETO DE HARDWARE
 Os materiais utilizados na construção do hardware foram:
-*ESP32
-*LDR
-*TMP36
-*Buzzer
-*Micro Servo Motor
-*Fototransistor
-*LED Emissor IR
-*LEDs
-*Resistores (330R, 1KR, 60KR)
-*Protoboard
+* ESP32
+* LDR
+* TMP36
+* Buzzer
+* Micro Servo Motor
+* Fototransistor
+* LED Emissor IR
+* LEDs
+* Resistores (330R, 1KR, 60KR)
+* Protoboard
 
 ![Diagrama Eletrico_Ti](https://user-images.githubusercontent.com/81964220/156466196-bfcc7afb-4976-4c0a-a8af-de1e7e6b301e.jpg)
 
